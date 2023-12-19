@@ -38,6 +38,17 @@ export default function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
+    getDocs(collection(db, "products")).then((q) => {
+      q.forEach((d) => {
+        let data = d.data();
+        data["id"] = d.id;
+        products.push(data);
+        setProducts(products);
+      });
+    });
+  }, []);
+
+  useEffect(() => {
     if (authUser) {
       // console.log(db);
       try {
@@ -50,17 +61,6 @@ export default function Home() {
     }
   }, [authUser]);
 
-  useEffect(() => {
-    getDocs(collection(db, "products")).then((q) => {
-      q.forEach((d) => {
-        let data = d.data();
-        data["id"] = d.id;
-        products.push(data);
-        setProducts(products);
-      });
-    });
-  }, []);
-
   return (
     <main>
       <Navbar userData={userData} />
@@ -72,7 +72,7 @@ export default function Home() {
               pId={p.id}
               title={p.title}
               price={p.price}
-              ratin="5.00"
+              rating="5.00"
               image={p.imagePath}
             />
           ))}
