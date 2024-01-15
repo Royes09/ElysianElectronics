@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
 
 const formatAuthUser = (user) => ({
   uid: user.uid,
@@ -16,6 +17,7 @@ const formatAuthUser = (user) => ({
 });
 
 export default function useFirebaseAuth() {
+  const router = useRouter();
   const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
   // console.log(authUser);
@@ -24,6 +26,9 @@ export default function useFirebaseAuth() {
     if (!authState) {
       setAuthUser(null);
       setLoading(false);
+      // console.log(window.location.pathname);
+      if (!["/register", "/recover"].includes(window.location.pathname))
+        router.push("/login");
       return;
     }
 

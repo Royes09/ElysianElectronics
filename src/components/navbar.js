@@ -1,13 +1,25 @@
 import { useAuth } from "@/contexts/AuthUserContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 function SearchBar() {
+  const router = useRouter();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const searchQuery = e.target.elements.search.value.trim();
+    window.location = `/search?search=${encodeURIComponent(searchQuery)}`;
+  };
+
   return (
     <div className="relative text-lg bg-transparent text-white w-full px-5">
-      <div className="flex items-center border-b border-b-2 border-teal-500 py-2">
+      <form
+        onSubmit={handleSearch}
+        className="flex items-center border-b-2 border-teal-500 py-2"
+      >
         <input
+          name="search"
           className="bg-transparent border-none mr-3 px-2 leading-tight focus:outline-none"
           type="text"
           placeholder="Search"
@@ -30,16 +42,20 @@ function SearchBar() {
             <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
           </svg>
         </button>
-      </div>
+      </form>
     </div>
   );
 }
 
-export default function Navbar({ userData }) {
+export default function Navbar({ userData, setCart, cart }) {
   const router = useRouter();
   const { authUser, logOut } = useAuth();
 
   const [showNav, setShowNav] = useState(false);
+
+  const handleSearch = () => {
+    window.location = `/search?favorite=1`;
+  };
 
   return (
     <nav className="flex justify-between bg-gray-900 text-white w-screen">
@@ -48,13 +64,22 @@ export default function Navbar({ userData }) {
           className="text-3xl font-bold font-heading relative h-full"
           href="/home"
         >
-          <Image src="/assets/logo.png" width={400} height={0} />
+          <Image
+            src="/assets/logo.png"
+            width={400}
+            height={0}
+            alt="Elysian"
+            priority={true}
+          />
         </a>
         <SearchBar />
         <div className="flex items-center space-x-5 w-full justify-end relative">
           {authUser ? (
             <>
-              <div className="hover:text-gray-200 cursor-pointer">
+              <div
+                onClick={() => handleSearch()}
+                className="hover:text-gray-200 cursor-pointer"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -69,8 +94,21 @@ export default function Navbar({ userData }) {
                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                   ></path>
                 </svg>
+                {userData.favorites.length > 0 ? (
+                  <span className="flex absolute -mt-7 ml-4">
+                    <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
+                  </span>
+                ) : (
+                  <></>
+                )}
               </div>
-              <div className="flex items-center hover:text-gray-200 cursor-pointer">
+              <div
+                onClick={() => {
+                  setCart(!cart);
+                }}
+                className="flex items-center hover:text-gray-200 cursor-pointer"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -85,10 +123,14 @@ export default function Navbar({ userData }) {
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                   ></path>
                 </svg>
-                <span className="flex absolute -mt-5 ml-4">
-                  <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
-                </span>
+                {userData.cart.length > 0 ? (
+                  <span className="flex absolute -mt-5 ml-4">
+                    <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-pink-500"></span>
+                  </span>
+                ) : (
+                  <></>
+                )}
               </div>
             </>
           ) : (
