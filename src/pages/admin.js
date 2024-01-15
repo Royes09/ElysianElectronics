@@ -118,7 +118,7 @@ function Comanda({ comanda, userData }) {
       }),
     });
 
-    toast.success("Comanda finalizata cu succes", "☠️");
+    toast.success("Comanda finalizata cu succes", "✅");
     router.reload();
   };
 

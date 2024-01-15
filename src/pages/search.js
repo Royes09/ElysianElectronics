@@ -86,14 +86,14 @@ export default function Search() {
     const productRef = doc(db, "products", pId);
     if (!userData["favorites"].some((d) => d.id == productRef.id)) {
       userData["favorites"].push(productRef);
-      toast.success("Added to favorites", { icon: "☠️" });
+      toast.success("Added to favorites", { icon: "✅" });
     } else {
       const productIndex = userData["favorites"].findIndex(
         (d) => d.id == productRef.id
       );
 
       userData["favorites"].splice(productIndex, 1);
-      toast.success("Removed from favorites", { icon: "☠️" });
+      toast.success("Removed from favorites", { icon: "✅" });
     }
     setUserData({ ...userData });
     await setDoc(user, userData);
@@ -115,7 +115,7 @@ export default function Search() {
               rating="5.00"
               image={p.imagePath[0]}
               stock={p.stock}
-              addToCart={() => toast.success("Added to cart", { icon: "☠️" })}
+              addToCart={() => toast.success("Added to cart", { icon: "✅" })}
               favorite={() => favorite(p.id)}
               favorited={userData.favorites?.some((fav) => fav.id === p.id)}
               disabled={disabled.includes(p.id) || p.stock == 0 || !p.stock}

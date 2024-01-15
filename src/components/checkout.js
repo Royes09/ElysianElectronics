@@ -57,7 +57,7 @@ export default function Checkout({ setShowModal, setProduct, userData }) {
       status: "Comanda plasata",
     });
 
-    toast.success("Comanda plasata", { icon: "☠️" });
+    toast.success("Comanda plasata", { icon: "✅" });
 
     const res = await fetch("/api/send/", {
       method: "POST",

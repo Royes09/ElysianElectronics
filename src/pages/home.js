@@ -52,7 +52,7 @@ export default function Home() {
     setUserData({ ...userData });
     await setDoc(user, userData);
 
-    toast.success("Added to cart", { icon: "☠️" });
+    toast.success("Added to cart", { icon: "✅" });
 
     window.location.reload();
     disabled.push(pId);
@@ -79,7 +79,7 @@ export default function Home() {
     setUserData({ ...userData });
     await setDoc(user, userData);
 
-    toast.success("Removed from cart", { icon: "☠️" });
+    toast.success("Removed from cart", { icon: "✅" });
     window.location.reload();
   };
 
@@ -88,14 +88,14 @@ export default function Home() {
     const productRef = doc(db, "products", pId);
     if (!userData["favorites"].some((d) => d.id == productRef.id)) {
       userData["favorites"].push(productRef);
-      toast.success("Added to favorites", { icon: "☠️" });
+      toast.success("Added to favorites", { icon: "✅" });
     } else {
       const productIndex = userData["favorites"].findIndex(
         (d) => d.id == productRef.id
       );
 
       userData["favorites"].splice(productIndex, 1);
-      toast.success("Removed from favorites", { icon: "☠️" });
+      toast.success("Removed from favorites", { icon: "✅" });
     }
     setUserData({ ...userData });
     await setDoc(user, userData);
